@@ -12,6 +12,10 @@ app = Flask(__name__)
 # Получение токена из переменных окружения
 BEARER_TOKEN = os.getenv("BEARER_TOKEN")
 
+@app.route('/', methods=['GET'])
+def home():
+    return "Welcome to the Invoice OCR API! Use the /process-invoice endpoint to process invoices.", 200
+
 @app.route('/process-invoice', methods=['POST'])
 def process_invoice():
     # Проверка токена
@@ -31,3 +35,6 @@ def process_invoice():
     image = Image.open(file)
     text = pytesseract.image_to_string(image)
     return jsonify({"recognized_text": text})
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
